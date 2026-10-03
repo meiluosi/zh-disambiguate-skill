@@ -1,0 +1,125 @@
+{
+  "_doc": "每道题给 agent 一段说明（原文或改写稿）和一个具体情况，让它从固定选项里选一个动作。pair 是相对本文件的目录，里面有 original.md 和 rewrite.md。intended 是作者意图对应的选项；为 null 表示作者意图未知，这道题只看一致率。kind=target 表示改写稿针对这道题的歧义做了修改；kind=control 表示两版在这一点上本来就一样清楚或一样模糊，用来检查评测本身有没有偏差。",
+  "unclear_option": "D",
+  "probes": [
+    {
+      "id": "01-force-default", "pair": "../../examples/pairs/01-tool-description", "kind": "control",
+      "situation": "目标文件 b.txt 已存在。用户没有设置 force 参数。",
+      "question": "按这段说明，这次重命名是否覆盖 b.txt？",
+      "options": {"A": "覆盖", "B": "不覆盖", "C": "由工具自行决定，两种都符合说明"},
+      "intended": null
+    },
+    {
+      "id": "01-slow-boundary", "pair": "../../examples/pairs/01-tool-description", "kind": "target",
+      "situation": "这次要处理正好 1000 个文件。",
+      "question": "按这段说明，处理 1000 个文件属于「可能变慢」的情况吗？",
+      "options": {"A": "属于", "B": "不属于"},
+      "intended": "B"
+    },
+    {
+      "id": "02-hedge", "pair": "../../examples/pairs/02-error-message", "kind": "control",
+      "situation": "你收到了这条报错。",
+      "question": "按这条报错，服务器是否确定没有处理你的请求？",
+      "options": {"A": "确定没有处理", "B": "不确定，可能处理了也可能没有"},
+      "intended": "B"
+    },
+    {
+      "id": "03-order-strength", "pair": "../../examples/pairs/03-system-prompt", "kind": "control",
+      "situation": "用户问退款。查询订单状态的工具暂时不可用。",
+      "question": "你能否跳过查询订单状态，直接判断是否转人工？",
+      "options": {"A": "能，查询订单状态只是建议", "B": "不能，必须先查询订单状态"},
+      "intended": null
+    },
+    {
+      "id": "03-amount-threshold", "pair": "../../examples/pairs/03-system-prompt", "kind": "control",
+      "situation": "用户为一笔 800 元的订单申请退款。",
+      "question": "你能否自行处理这笔退款？",
+      "options": {"A": "能", "B": "不能"},
+      "intended": null
+    },
+    {
+      "id": "04-disk-boundary", "pair": "../../examples/pairs/04-runbook", "kind": "target",
+      "situation": "磁盘使用率正好是 90%。",
+      "question": "现在是否要清理日志目录？",
+      "options": {"A": "要清理", "B": "不清理"},
+      "intended": "A"
+    },
+    {
+      "id": "04-active-log", "pair": "../../examples/pairs/04-runbook", "kind": "control",
+      "situation": "磁盘使用率 95%。app.log 正在被写入，最后修改时间是 10 天前。",
+      "question": "是否删除 app.log？",
+      "options": {"A": "删除", "B": "不删除"},
+      "intended": "B"
+    },
+    {
+      "id": "04-order", "pair": "../../examples/pairs/04-runbook", "kind": "control",
+      "situation": "磁盘使用率 95%。",
+      "question": "清理日志和重启服务，哪个先做？",
+      "options": {"A": "先清理日志，再重启服务", "B": "先重启服务，再清理日志"},
+      "intended": "A"
+    },
+    {
+      "id": "05-all-done", "pair": "../../examples/pairs/05-status-report", "kind": "control",
+      "situation": "你要根据这份状态报告决定是否关闭迁移工单。",
+      "question": "迁移是否已经全部成功？",
+      "options": {"A": "全部成功", "B": "没有全部成功"},
+      "intended": "B"
+    },
+    {
+      "id": "06-socket-only", "pair": "pairs/06-and-or", "kind": "target",
+      "situation": "配置了 socket，没有配置 host 和 port。",
+      "question": "客户端是否拒绝启动？",
+      "options": {"A": "拒绝启动", "B": "正常启动"},
+      "intended": "B"
+    },
+    {
+      "id": "06-host-only", "pair": "pairs/06-and-or", "kind": "target",
+      "situation": "配置了 host，没有配置 port 和 socket。",
+      "question": "客户端是否拒绝启动？",
+      "options": {"A": "拒绝启动", "B": "正常启动"},
+      "intended": "A"
+    },
+    {
+      "id": "07-who-requeues", "pair": "pairs/07-pronoun", "kind": "target",
+      "situation": "一个任务执行超时了。",
+      "question": "谁把任务放回队列？",
+      "options": {"A": "调度器", "B": "工作节点"},
+      "intended": "A"
+    },
+    {
+      "id": "07-what-times-out", "pair": "pairs/07-pronoun", "kind": "target",
+      "situation": "你在实现超时处理逻辑。",
+      "question": "触发重新入队的是哪种超时？",
+      "options": {"A": "工作节点执行任务超时", "B": "调度器分配任务超时"},
+      "intended": "A"
+    },
+    {
+      "id": "08-day-30", "pair": "pairs/08-retention-boundary", "kind": "target",
+      "situation": "有一份备份正好创建于 30 天前。",
+      "question": "是否删除这份备份？",
+      "options": {"A": "删除", "B": "保留"},
+      "intended": "B"
+    },
+    {
+      "id": "09-unless", "pair": "pairs/09-detached-condition", "kind": "target",
+      "situation": "生产环境。所有迁移都已经手动完成。",
+      "question": "这时使用 --skip-migrate 是否仍然不建议？",
+      "options": {"A": "仍然不建议", "B": "不再是不建议的情况"},
+      "intended": "B"
+    },
+    {
+      "id": "10-auth", "pair": "pairs/10-double-negation", "kind": "target",
+      "situation": "你要写接口调用代码。",
+      "question": "这句话是否表示至少有一个接口需要鉴权？",
+      "options": {"A": "是", "B": "否，表示所有接口都需要鉴权", "C": "否，表示所有接口都不需要鉴权"},
+      "intended": "A"
+    },
+    {
+      "id": "11-omit-header", "pair": "pairs/11-modal-strength", "kind": "target",
+      "situation": "你是调用方，正在写一个一次性的调试脚本，生成 X-Request-Id 比较麻烦。",
+      "question": "按这段说明，你能否省略 X-Request-Id？",
+      "options": {"A": "能省略，这只是建议", "B": "不能省略"},
+      "intended": "B"
+    }
+  ]
+}

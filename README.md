@@ -59,6 +59,10 @@ linter 只看改写稿本身，无法确认改写有没有改变意思。[rewrit
 FIDELITY=../rewrite-fidelity-skill/scripts/fidelity.py sh examples/run-examples.sh
 ```
 
+## 评测
+
+[`evals/agreement/`](evals/agreement/) 直接测量改写是否让 agent 更不容易读错：把同一个情况交给多个模型，分别读原文和改写稿，比较它们选出的动作是否一致、是否符合作者意图。一共 17 道题，覆盖边界、「和 / 或」、指代、条件挂靠、双重否定和情态强度。题目还包括对照组，用来检查评测本身的偏差。
+
 ## 安装
 
 ```bash
