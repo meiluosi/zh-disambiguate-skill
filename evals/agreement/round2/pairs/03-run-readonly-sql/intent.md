@@ -1,0 +1,1 @@
+作者意图：“大表”指行数超过约 500 万的表，目前主要是 `events` 和 `order_items`；这两张表查询时必须带 `created_at` 的范围条件，并且 `LIMIT` 不超过 1000。小表可以不带。“别的语句”包括 `INSERT`、`UPDATE`、`DELETE`、`DROP`，也包括 `EXPLAIN ANALYZE`（因为它会真实执行）。30 秒是服务端 `statement_timeout`，超时后返回错误码 `QUERY_TIMEOUT`，模型应缩小范围后重试，不要原样重发。

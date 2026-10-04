@@ -1,0 +1,22 @@
+{
+ "blind_picks": {
+  "01-dingtalk-send-text": "A",
+  "02-dingtalk-send-markdown": "B",
+  "03-dingtalk-recall": "A",
+  "04-dingtalk-employee-count": "tie",
+  "05-amap-ip-location": "B",
+  "06-amap-walking": "A",
+  "07-baidu-search": "B",
+  "08-baidu-fetch-url": "tie"
+ },
+ "key": {
+  "01-dingtalk-send-text": "A=rewrite",
+  "02-dingtalk-send-markdown": "A=original",
+  "03-dingtalk-recall": "A=rewrite",
+  "04-dingtalk-employee-count": "A=original",
+  "05-amap-ip-location": "A=original",
+  "06-amap-walking": "A=original",
+  "07-baidu-search": "A=rewrite",
+  "08-baidu-fetch-url": "A=rewrite"
+ }
+}

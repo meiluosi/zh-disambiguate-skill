@@ -1,0 +1,1 @@
+作者意图：“静默失败”指 certbot 的定时任务退出码为 0 但没有真正更新证书，所以不能只依赖告警邮件。“剩余天数”看 `certbot certificates` 输出里的 `VALID: N days`，N 小于 14 就手动续，等于 14 不处理。“确认新证书生效”指 `curl -vI` 输出里 `expire date` 比之前晚，并且没有 `SSL certificate problem`。“泛域名证书”指域名形如 `*.example.com` 的证书，续期需要 DNS-01 验证，运维同学不要自己改 DNS，直接联系 SRE，不要尝试执行 `renew.sh`。
