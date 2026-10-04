@@ -1,0 +1,19 @@
+[
+{"id":"04-order","choice":"A","reason":"步骤 2 写明「清理完成后」才重启服务。"},
+{"id":"05-all-done","choice":"B","reason":"大部分同步成功，一些表出了问题。"},
+{"id":"07-what-times-out","choice":"A","reason":"触发重新入队的是工作节点执行任务超时。"},
+{"id":"01-slow-boundary","choice":"B","reason":"「超过 1000 个」，正好 1000 个不在该情况内。"},
+{"id":"11-omit-header","choice":"B","reason":"说明用「必须」要求携带。"},
+{"id":"09-unless","choice":"B","reason":"迁移全部完成时，「不建议」不再适用。"},
+{"id":"04-active-log","choice":"B","reason":"说明规定不得删除正在写入的日志文件。"},
+{"id":"01-force-default","choice":"B","reason":"没有设置 force，所以不覆盖。"},
+{"id":"03-order-strength","choice":"D","reason":"「应该先查询」的约束强度不明。"},
+{"id":"06-socket-only","choice":"B","reason":"socket 已配置，条件 1 不成立。"},
+{"id":"02-hedge","choice":"B","reason":"报错写的是「可能没有处理」。"},
+{"id":"06-host-only","choice":"A","reason":"两个条件同时成立，所以拒绝启动。"},
+{"id":"10-auth","choice":"A","reason":"「至少有一个」就是一个或更多。"},
+{"id":"03-amount-threshold","choice":"D","reason":"没有给出阈值。"},
+{"id":"07-who-requeues","choice":"A","reason":"是调度器把超时的任务重新放回队列。"},
+{"id":"04-disk-boundary","choice":"A","reason":"条件是 ≥ 90%，正好 90% 满足。"},
+{"id":"08-day-30","choice":"B","reason":"说明写明含正好 30 天，所以保留。"}
+]
