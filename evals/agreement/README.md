@@ -39,6 +39,27 @@ python3 score.py results/2026-10-04             # 生成 results/2026-10-04/repo
 
 默认配置是 17 道题 × 2 个版本 × 3 个模型 × 3 次 = 306 次调用，估算花费不到 2 美元。可以用 `--models`、`--reps`、`--only` 缩小范围。
 
+### 没有 API key：在 Claude Code 里用子代理
+
+Claude 订阅额度不能当 API key 用，但可以在 Claude Code 会话里让子代理当读者：
+
+```bash
+python3 subagent.py emit results/<日期>-subagent    # 生成 6 个 batch 文件（2 个版本 × 3 次）
+```
+
+然后在 Claude Code 里，为每个 batch 文件和每个读者模型（opus / sonnet / haiku）各起一个子代理。让它只读这一个文件，按文件要求返回 JSON 数组。把返回结果存成 `answers/<模型>__<original|rewrite>_r<次>.json`，再运行：
+
+```bash
+python3 subagent.py ingest results/<日期>-subagent
+python3 score.py results/<日期>-subagent
+```
+
+这种方式和 `run.py` 有三点不同，会记在 `manifest.json` 里：
+
+- 一个子代理一次回答一个版本的全部题目，题目顺序按次数打乱。
+- 答案格式靠提示词约束，不是 API 结构化输出。
+- 子代理继承会话的 effort、用户的 CLAUDE.md 和已安装的 skill。
+
 ## 设计取舍
 
 - **用结构化输出限定选项。**答案只能是选项字母，不需要另外的评委模型，打分完全确定。
