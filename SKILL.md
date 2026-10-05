@@ -1,7 +1,7 @@
 ---
 name: zh-disambiguate
 description: "Use when Simplified Chinese text will be read and acted on by an agent or a program with no human to ask — tool and function descriptions, system prompts, inter-agent instructions, error messages, runbooks, status reports — and a wrong reading has a cost, or when Chinese text is dense, hedged, or easy to misread. Rewrites it into short, single-meaning sentences with an explicit actor, explicit conditions, explicit negation scope, inclusive/exclusive bounds, and a fixed modal ladder (必须/建议/可以/能/可能). Triggers: 消歧, 去歧义, 改得不会被误读, 让 agent 读不错, 受控中文, 简化技术中文改写, 改写工具描述, 改写报错信息, 改写系统提示词, disambiguate Chinese. Not for creative or marketing copy, Traditional Chinese, or translation."
-version: 0.1.0
+version: 0.1.1
 ---
 
 # 消歧中文（zh-disambiguate）
