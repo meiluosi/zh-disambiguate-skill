@@ -62,7 +62,11 @@ FIDELITY=../rewrite-fidelity-skill/scripts/fidelity.py sh examples/run-examples.
 
 ## 评测
 
-[`evals/agreement/`](evals/agreement/) 直接测量改写是否让 agent 更不容易读错：把同一个情况交给多个模型，分别读原文和改写稿，比较它们选出的动作是否一致、是否符合作者意图。一共 17 道题，覆盖边界、「和 / 或」、指代、条件挂靠、双重否定和情态强度。题目还包括对照组，用来检查评测本身的偏差。
+评测直接测量「改写后，agent 读得是否更准」：把同一个情况交给 3 个模型，分别读原文和改写稿，看它们选出的动作是否符合作者的意图。详情和所有局限见 [`evals/agreement/`](evals/agreement/README.md) 和 [`evals/real/`](evals/real/README.md)。
+
+**目前最可信的数字（第三轮）：**改写者只能向作者提问，不知道作者的答案。20 段新文字、36 道考察歧义的题，读者选中作者意图的比例，原文 31%，改写后 84%；回答「说明不足以判断」的比例，60% 降到 13%。没做到的 7 道题，全部是改写者根本没想到要问的地方（下标从 0 还是从 1、`previous` 指哪个版本之类）。
+
+**还没有做到的：**读者都是 Claude，不是真人；每段文字只改写了一次，方差没测；真人评测的问卷已经备好（[`evals/real/questionnaire/`](evals/real/questionnaire/questionnaire.md)），还没有人填。
 
 ## 安装
 
