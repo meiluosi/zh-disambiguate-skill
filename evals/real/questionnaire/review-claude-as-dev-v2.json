@@ -1,0 +1,83 @@
+{
+ "reviewer": "Claude (acting as a Chinese developer)",
+ "note": "One reviewer, 8 pairs, not a human study.",
+ "tally": {
+  "rewrite": 5,
+  "original": 2,
+  "tie": 1
+ },
+ "rows": [
+  {
+   "group": 1,
+   "item": "01-dingtalk-send-text",
+   "pick": "A",
+   "strength": "weak",
+   "winner": "rewrite",
+   "why": "更顺：调用方、列表上限写得明白",
+   "rewriter_questions": "保留未改：「企业用户发送消息」无法确定是「企业用户发出消息」还是「向企业用户发送消息」。send_corp_conversation 和 send_markdown_corp_conversation 的描述一字不差，模型无法据此在两个工具之间选择。请作者写明执行者，并写明两个工具的区别（例如消息格式）。「2048 个"
+  },
+  {
+   "group": 2,
+   "item": "02-dingtalk-send-markdown",
+   "pick": "A",
+   "strength": "weak",
+   "winner": "rewrite",
+   "why": "同上",
+   "rewriter_questions": "保留未改：「企业用户发送消息」无法确定是「企业用户发出消息」还是「向企业用户发送消息」。send_markdown_corp_conversation 和 send_corp_conversation 的描述一字不差，模型无法据此在两个工具之间选择。请作者写明执行者，并写明两个工具的区别（例如消息格式）。content"
+  },
+  {
+   "group": 3,
+   "item": "03-dingtalk-recall",
+   "pick": "B",
+   "strength": "weak",
+   "winner": "rewrite",
+   "why": "改正了「撤回给员工」的语病",
+   "rewriter_questions": "保留未改：「发送消息时钉钉返回的任务ID」没有写明是哪个工具的返回值，也没有写明 send_corp_conversation 和 send_markdown_corp_conversation 返回的 taskId 是否都能用于撤回。"
+  },
+  {
+   "group": 4,
+   "item": "04-dingtalk-employee-count",
+   "pick": "A",
+   "strength": "clear",
+   "winner": "rewrite",
+   "why": "原文问「是否包含未激活」，取值却是 true=只含激活，题和答案方向相反；改写让标题和取值一致",
+   "rewriter_questions": ""
+  },
+  {
+   "group": 5,
+   "item": "05-amap-ip-location",
+   "pick": "A",
+   "strength": "clear",
+   "winner": "rewrite",
+   "why": "原文是病句，改写读得通",
+   "rewriter_questions": "保留未改：「用户输入的 IP 地址」保留原写法。原文没有写明「用户」指终端用户还是调用方，也就是没有写明调用方能不能传入不是终端用户输入的 IP 地址。原文也没有写明「所在位置」的精度（国家、省或城市）。"
+  },
+  {
+   "group": 6,
+   "item": "06-amap-walking",
+   "pick": "tie",
+   "strength": null,
+   "winner": "tie",
+   "why": "没有实质区别；两个版本都没说 100 km 是直线还是路线",
+   "rewriter_questions": "保留未改：「100 km 以内」保留原写法。原文没有写明是否含 100 km。原文没有写明 100 km 指起点到终点的直线距离还是步行路线长度。原文也没有写明超过 100 km 时工具返回什么。"
+  },
+  {
+   "group": 7,
+   "item": "07-baidu-search",
+   "pick": "B",
+   "strength": "weak",
+   "winner": "original",
+   "why": "原文已经清楚、更短；改写把 baidu_search 重复了 5 次，读起来别扭",
+   "rewriter_questions": "保留未改：规则 1 的两句可能冲突。一个用户问题涉及多个主题时，原文没有写明调用方只能调用一次 baidu_search，还是可以每个主题各调用一次。「不够详细」「耗时较长」「谨慎使用」保留原写法，原文没有给出可判定的条件。"
+  },
+  {
+   "group": 8,
+   "item": "08-baidu-fetch-url",
+   "pick": "A",
+   "strength": "weak",
+   "winner": "original",
+   "why": "改写把 fetch_url 重复 3 次，没增加信息",
+   "rewriter_questions": ""
+  }
+ ]
+}

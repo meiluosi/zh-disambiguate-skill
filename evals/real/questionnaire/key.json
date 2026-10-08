@@ -1,0 +1,23 @@
+{
+ "seed": 20261008,
+ "key": {
+  "01-dingtalk-send-text": "A=rewrite",
+  "02-dingtalk-send-markdown": "A=rewrite",
+  "03-dingtalk-recall": "A=original",
+  "04-dingtalk-employee-count": "A=rewrite",
+  "05-amap-ip-location": "A=rewrite",
+  "06-amap-walking": "A=original",
+  "07-baidu-search": "A=rewrite",
+  "08-baidu-fetch-url": "A=original"
+ },
+ "order": [
+  "01-dingtalk-send-text",
+  "02-dingtalk-send-markdown",
+  "03-dingtalk-recall",
+  "04-dingtalk-employee-count",
+  "05-amap-ip-location",
+  "06-amap-walking",
+  "07-baidu-search",
+  "08-baidu-fetch-url"
+ ]
+}
