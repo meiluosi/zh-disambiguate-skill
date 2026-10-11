@@ -1,19 +1,58 @@
 # zh-disambiguate：消歧中文
 
-[English](#english)
+把中文工具描述、系统提示词和操作步骤改得更明确，让 agent 少误读一点。原文缺少的信息会列成问题，留给作者确认。
 
-一个 Claude Code skill，把简体中文改写成只有一种读法的文字。读者是 agent 或程序：工具描述、系统提示词、agent 间指令、报错信息、运维步骤。读错了，也没有人可以问。
+[English](#english) · [安装与第一次使用](#安装与第一次使用) · [更多改写示例](examples/before-after.md) · [评测与局限](#评测与局限)
 
-思路来自 [ASD-STE100 简化技术英语](https://www.asd-ste100.org/)，以及把它用在 agent 输出上的 [asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill)。中文的歧义来源和英文不完全一样，所以本项目没有翻译英文规则，而是专门检查中文特有的问题。
+## 一段改写，哪些能改、哪些要问
 
-## 改写前后
+以下是仓库中的[客服系统提示词示例](examples/before-after.md#3-系统提示词)。
 
-| 改写前 | 改写后 |
-|---|---|
-| 当磁盘使用率达到 90% 以上时，需要对日志目录进行清理，删除 7 天以前的日志文件，清理完成后重启服务，注意不要删除当前正在写入的日志文件。 | 磁盘使用率 ≥ 90% 时，必须按以下步骤清理日志目录：<br>1. 删除最后修改时间在 7 天以前的日志文件。不得删除正在写入的日志文件。<br>2. 清理完成后，重启服务。<br><br>保留未改：「7 天以前」。原文没有说明是否含第 7 天。 |
-| 你是一个客服助手。用户询问退款问题时，你应该先查询订单状态，然后根据情况决定是否需要转人工，对于金额较大的订单不要自行处理。 | 你是客服助手。用户询问退款时，按以下顺序处理：<br>1. 你应该先查询订单状态。<br>2. 根据情况，判断是否需要转人工客服。<br><br>订单金额较大时，你不得自行处理。<br><br>保留未改：「应该」。原文没有说明是必须还是建议。「较大」没有给出金额阈值。 |
+**原文**
 
-第二个例子里的「应该」故意没有改。改成「必须」还是「建议」，应该由作者决定，不由改写者替作者选。更多示例见 [`examples/before-after.md`](examples/before-after.md)。
+> 你是一个客服助手。用户询问退款问题时，你应该先查询订单状态，然后根据情况决定是否需要转人工，对于金额较大的订单不要自行处理。
+
+**改写**
+
+> 你是客服助手。用户询问退款时，按以下顺序处理：
+>
+> 1. 你应该先查询订单状态。
+> 2. 根据情况，判断是否需要转人工客服。
+>
+> 订单金额较大时，你不得自行处理。
+>
+> 保留未改：「应该」。原文没有说明这是必须还是建议，请选「必须」或「建议」。「较大」原文没有给出金额阈值，建议补成「超过 X 元」。「根据情况」原文没有说明依据什么情况。
+
+动作顺序更清楚了，但「应该」仍然保留。把它改成「必须」还是「建议」，由作者决定；「较大」的金额阈值也不能靠改写者猜。发布文本前，需要作者处理这些问题，并移除写给作者的「保留未改：」附注。
+
+## 安装与第一次使用
+
+```bash
+npx skills add meiluosi/zh-disambiguate-skill
+```
+
+或者：
+
+```bash
+git clone https://github.com/meiluosi/zh-disambiguate-skill ~/.claude/skills/zh-disambiguate
+```
+
+安装后，在 Claude Code 里试一段真实文本：
+
+```text
+用 zh-disambiguate 改写下面的系统提示词，并列出仍需作者确认的地方：
+
+你是一个客服助手。用户询问退款问题时，你应该先查询订单状态，然后根据情况决定是否需要转人工，对于金额较大的订单不要自行处理。
+```
+
+也可以这样调用：
+
+```text
+把这段工具描述改得不会被 agent 误读
+消歧这段系统提示词
+用 zh-disambiguate 改写这个报错信息
+改了哪些地方？给我看对照表
+```
 
 ## 中文特有的歧义
 
@@ -60,34 +99,40 @@ linter 只看改写稿本身，无法确认改写有没有改变意思。[rewrit
 FIDELITY=../rewrite-fidelity-skill/scripts/fidelity.py sh examples/run-examples.sh
 ```
 
-## 评测
+## 评测与局限
 
-评测直接测量「改写后，agent 读得是否更准」：把同一个情况交给 3 个模型，分别读原文和改写稿，看它们选出的动作是否符合作者的意图。详情和所有局限见 [`evals/agreement/`](evals/agreement/README.md) 和 [`evals/real/`](evals/real/README.md)。
+评测测量「改写后，agent 读得是否更准」：给读者同一个情况，分别阅读原文和改写稿，检查所选动作是否符合作者意图。完整方法、记录和局限见 [下游一致率评测](evals/agreement/README.md) 与 [真实文本试用](evals/real/README.md)。
 
-**目前最可信的数字（第三轮）：**改写者只能向作者提问，不知道作者的答案。20 段新文字、36 道考察歧义的题，读者选中作者意图的比例，原文 31%，改写后 84%；回答「说明不足以判断」的比例，60% 降到 13%。没做到的 7 道题，全部是改写者根本没想到要问的地方（下标从 0 还是从 1、`previous` 指哪个版本之类）。
+**第三轮（2026-10-08）：20 段文字、40 道题，其中 36 道考察歧义，4 道为对照。**改写者起初只能看原文，通过提问向作者模拟器补充信息。以下比例仅对应 36 道考察歧义的题：
 
-**还没有做到的：**读者都是 Claude，不是真人；每段文字只改写了一次，方差没测；真人评测的问卷已经备好（[`evals/real/questionnaire/`](evals/real/questionnaire/questionnaire.md)），还没有人填。
+| 指标 | 原文 | 改写终稿 |
+|---|---|---|
+| 读者选中作者意图 | 31% | 84% |
+| 回答「说明不足以判断」 | 60% | 13% |
 
-## 安装
+没做到的 7 道题，全部是改写者没有问到的地方，例如下标从 0 还是从 1 开始、`previous` 指哪个版本。4 道对照题的意图命中均为 100%。
 
-```bash
-npx skills add meiluosi/zh-disambiguate-skill
-```
+这些结果有明确的范围：
 
-或者：
+- 读者是 3 个 Claude 模型，不是真人；样本小，不能推广到其他文体。原文回答复用第二轮数据。
+- 每段文字只改写了一次，没有测量不同改写者或重复改写的方差。
+- 作者模拟器的答案与题目来自同一份意图记录，回答有时会多提供信息；真实作者的回答可能更含糊。
+- 读者看到的终稿已移除「保留未改：」附注；仍有 14 份文本包含待作者回答的问题，这部分使用流程没有评测。
+- 另有 8 段开源工具描述的试用，读者仍是 Claude 扮演的开发者，不构成人类评测。[真人问卷](evals/real/questionnaire/questionnaire.md) 已备好，目前还没有人填写。
 
-```bash
-git clone https://github.com/meiluosi/zh-disambiguate-skill ~/.claude/skills/zh-disambiguate
-```
+结果支持继续研究这套流程，不能保证一段文字改写后就没有歧义。
 
-## 使用
+## 另一个例子：把警告放回对应步骤
 
-```
-把这段工具描述改得不会被 agent 误读
-消歧这段系统提示词
-用 zh-disambiguate 改写这个报错信息
-改了哪些地方？给我看对照表
-```
+| 改写前 | 改写后 |
+|---|---|
+| 当磁盘使用率达到 90% 以上时，需要对日志目录进行清理，删除 7 天以前的日志文件，清理完成后重启服务，注意不要删除当前正在写入的日志文件。 | 磁盘使用率 ≥ 90% 时，必须按以下步骤清理日志目录：<br>1. 删除最后修改时间在 7 天以前的日志文件。不得删除正在写入的日志文件。<br>2. 清理完成后，重启服务。<br><br>保留未改：「7 天以前」。原文没有说明是否含第 7 天。 |
+
+这是现有的[运维步骤示例](examples/before-after.md#4-运维步骤)。删除警告移到了删除这一步；原文未说清的日期边界仍需作者确认。
+
+## 设计来源
+
+思路来自 [ASD-STE100 简化技术英语](https://www.asd-ste100.org/)，以及把它用在 agent 输出上的 [asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill)。中文的歧义来源和英文不完全一样，所以本项目没有翻译英文规则，而是专门检查中文特有的问题。
 
 ## 和相近项目的区别
 
@@ -115,7 +160,38 @@ MIT
 
 ## English
 
-A Claude Code skill that rewrites Simplified Chinese into text with exactly one reading, for agent and program readers: tool descriptions, system prompts, inter-agent instructions, error messages, and runbooks. It follows the approach of ASD-STE100 and [asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill). The rules target ambiguity sources specific to Chinese:
+A Claude Code skill for reducing ambiguity in Simplified Chinese tool descriptions, system prompts, inter-agent instructions, error messages, and runbooks. Missing information becomes a question for the author; the skill must not invent an actor, number, or bound.
+
+### See what changes
+
+The [customer-support example](examples/before-after.md#3-系统提示词) separates a refund instruction into ordered steps. It deliberately keeps `应该` (“should”), because choosing between a requirement and a recommendation belongs to the author. It also asks what counts as a “large” order and what conditions require a handoff. The Chinese before/after text is [shown above](#一段改写哪些能改哪些要问).
+
+### Install and try
+
+```bash
+npx skills add meiluosi/zh-disambiguate-skill
+```
+
+Or clone it into Claude Code's skills directory:
+
+```bash
+git clone https://github.com/meiluosi/zh-disambiguate-skill ~/.claude/skills/zh-disambiguate
+```
+
+In Claude Code, provide the source text:
+
+```text
+Use zh-disambiguate to rewrite this Chinese tool description.
+List information that still needs the author's confirmation.
+
+[paste the original Chinese text here]
+```
+
+Resolve the questions before publishing the text and remove the `保留未改：` note addressed to the author.
+
+### Rules and checks
+
+The approach draws on [ASD-STE100](https://www.asd-ste100.org/) and [asd-ste100-skill](https://github.com/danyuchn/asd-ste100-skill), with rules specific to Chinese:
 
 - dropped actors
 - whether 以上 / 以下 include the bound
@@ -126,4 +202,13 @@ A Claude Code skill that rewrites Simplified Chinese into text with exactly one 
 - a five-level modal ladder mapped to RFC 2119
 - conditions that detach from the action they limit
 
-It has a stdlib-only linter (`scripts/zh-lint.py`) and an optional fidelity pass through [rewrite-fidelity](https://github.com/meiluosi/rewrite-fidelity-skill). It never removes hedges, and it never invents a missing actor, number, or bound. When the source is underspecified, it says so in a single `保留未改：` line.
+It includes a Python 3.8+ stdlib-only linter ([`scripts/zh-lint.py`](scripts/zh-lint.py)) and an optional fidelity pass through [rewrite-fidelity](https://github.com/meiluosi/rewrite-fidelity-skill). Hedges must survive; underspecified details go in a `保留未改：` note. The linter cannot check omitted actors or condition attachment without context.
+
+### Evidence and limits
+
+In round 3, rewriters asked an author simulator questions about 20 texts. On 36 ambiguity probes out of 40 total probes, author-intent accuracy went from 31% to 84%; “insufficient information” responses went from 60% to 13%. The remaining 4 control probes stayed at 100% accuracy. All 7 unresolved probes concerned questions the rewriter did not ask.
+
+Readers were 3 Claude models, each text was rewritten once, and the original-text baseline was reused from round 2. The author simulator and probes shared the same intent records, and its answers sometimes supplied extra information. Reader inputs omitted the author-facing notes; resolving the questions remaining in 14 texts was not evaluated. A separate 8-text trial also used a simulated reader. No human-reader evaluation has been completed.
+
+See the [full evaluation](evals/agreement/README.md), [real-text trial](evals/real/README.md), and [human questionnaire](evals/real/questionnaire/questionnaire.md). These small evaluations do not establish that rewritten text is ambiguity-free.
+
