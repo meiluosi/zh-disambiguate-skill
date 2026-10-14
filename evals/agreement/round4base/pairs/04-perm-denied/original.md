@@ -1,0 +1,1 @@
+403：当前账号没有 `project:deploy` 权限，没法操作 `prod-gateway`。请联系项目管理员在「成员管理」里给你加 `Maintainer` 以上的角色，加完之后重新登录再试。

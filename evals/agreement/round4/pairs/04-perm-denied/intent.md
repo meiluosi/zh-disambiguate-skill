@@ -1,0 +1,1 @@
+作者意图：这是返回给调用者（人或 agent）的拒绝提示，意思是该账号缺少 `project:deploy` 权限，所以对 `prod-gateway` 的操作被拒绝，agent 不要自己重试或换账号绕过。要解决就得由项目管理员把该账号的角色提到 `Maintainer` 或更高（`Owner` 也可以，`Developer` 和 `Reporter` 不行）。"重新登录"指退出当前会话并重新获取 token，让新权限生效，不是指换一个账号。

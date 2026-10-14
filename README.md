@@ -112,10 +112,12 @@ FIDELITY=../rewrite-fidelity-skill/scripts/fidelity.py sh examples/run-examples.
 
 没做到的 7 道题，全部是改写者没有问到的地方，例如下标从 0 还是从 1 开始、`previous` 指哪个版本。4 道对照题的意图命中均为 100%。
 
+**第四轮（2026-10-10 至 10-15）：方差，和 v0.1.2 的检查清单。**同一批文字、同样的流水线再跑 2 次，读者选中作者意图的比例是 84%、76%、75%，波动约 9 个百分点，所以第三轮的 84% 应读作「75% 到 84%」。那 7 个缺口三次全漏，是系统性盲区，不是运气。v0.1.2 在 SKILL.md 里加了「看起来像常识」的问题清单，在同一批文字上补上了其中 5 个，意图命中 93%，代价是多问约 44% 的问题。这个提升有一部分是循环的（清单的类别来自这 7 个盲区），清单版也只跑了 1 次；全新的 10 段文字上基线已经是 100%，没有提升空间，无法验证泛化。
+
 这些结果有明确的范围：
 
 - 读者是 3 个 Claude 模型，不是真人；样本小，不能推广到其他文体。原文回答复用第二轮数据。
-- 每段文字只改写了一次，没有测量不同改写者或重复改写的方差。
+- 第三轮每段文字只改写了一次；第四轮把基线重复跑了 3 次，波动约 9 个百分点，检查清单版只跑了 1 次。
 - 作者模拟器的答案与题目来自同一份意图记录，回答有时会多提供信息；真实作者的回答可能更含糊。
 - 读者看到的终稿已移除「保留未改：」附注；仍有 14 份文本包含待作者回答的问题，这部分使用流程没有评测。
 - 另有 8 段开源工具描述的试用，读者仍是 Claude 扮演的开发者，不构成人类评测。[真人问卷](evals/real/questionnaire/questionnaire.md) 已备好，目前还没有人填写。
@@ -208,7 +210,9 @@ It includes a Python 3.8+ stdlib-only linter ([`scripts/zh-lint.py`](scripts/zh-
 
 In round 3, rewriters asked an author simulator questions about 20 texts. On 36 ambiguity probes out of 40 total probes, author-intent accuracy went from 31% to 84%; “insufficient information” responses went from 60% to 13%. The remaining 4 control probes stayed at 100% accuracy. All 7 unresolved probes concerned questions the rewriter did not ask.
 
-Readers were 3 Claude models, each text was rewritten once, and the original-text baseline was reused from round 2. The author simulator and probes shared the same intent records, and its answers sometimes supplied extra information. Reader inputs omitted the author-facing notes; resolving the questions remaining in 14 texts was not evaluated. A separate 8-text trial also used a simulated reader. No human-reader evaluation has been completed.
+Round 4 repeated the same pipeline twice more on the same texts: author-intent accuracy was 84%, 76%, and 75%, so round 3's 84% is the top of a 75–84% range, and the same 7 gaps were missed every time. The v0.1.2 checklist fixed 5 of those 7 (93% accuracy) at the cost of about 44% more questions; part of that gain is circular because the checklist categories came from those gaps, it was run once, and on 10 fresh texts the baseline already scored 100%, leaving no room to show generalization.
+
+Readers were 3 Claude models, each text was rewritten once in round 3, and the original-text baseline was reused from round 2. The author simulator and probes shared the same intent records, and its answers sometimes supplied extra information. Reader inputs omitted the author-facing notes; resolving the questions remaining in 14 texts was not evaluated. A separate 8-text trial also used a simulated reader. No human-reader evaluation has been completed.
 
 See the [full evaluation](evals/agreement/README.md), [real-text trial](evals/real/README.md), and [human questionnaire](evals/real/questionnaire/questionnaire.md). These small evaluations do not establish that rewritten text is ambiguity-free.
 

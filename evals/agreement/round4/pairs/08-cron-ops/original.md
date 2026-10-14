@@ -1,0 +1,1 @@
+改定时任务的时间表之前，先把 `crontab -l` 的输出存一份到 `/tmp/crontab.bak.$(date +%F)`。改完用 `crontab -l` 看一眼有没有写岔，然后观察下一次触发，确认日志里 `/var/log/jobs/report.log` 有新的一行再算完事。注意服务器是 UTC，别按北京时间写。

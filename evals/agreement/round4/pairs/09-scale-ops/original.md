@@ -1,0 +1,1 @@
+`checkout-api` 如果 CPU 持续在 80% 以上，可以先手动把 `replicas` 从 4 调到 8，用 `kubectl scale deploy/checkout-api --replicas=8`。调完等几分钟看负载降没降，没降就别再加了，去找人看是不是下游慢。HPA 的上限是 12，手动调的时候别超过。

@@ -1,7 +1,7 @@
 ---
 name: zh-disambiguate
 description: "Use when Simplified Chinese text will be read and acted on by an agent or a program with no human to ask — tool and function descriptions, system prompts, inter-agent instructions, error messages, runbooks, status reports — and a wrong reading has a cost, or when Chinese text is dense, hedged, or easy to misread. Rewrites it into short, single-meaning sentences with an explicit actor, explicit conditions, explicit negation scope, inclusive/exclusive bounds, and a fixed modal ladder (必须/建议/可以/能/可能). Triggers: 消歧, 去歧义, 改得不会被误读, 让 agent 读不错, 受控中文, 简化技术中文改写, 改写工具描述, 改写报错信息, 改写系统提示词, disambiguate Chinese. Not for creative or marketing copy, Traditional Chinese, or translation."
-version: 0.1.1
+version: 0.1.2
 ---
 
 # 消歧中文（zh-disambiguate）
@@ -111,11 +111,26 @@ version: 0.1.1
 7. **省略执行者**：一句里出现两个动作，主语只写了一个，或者一个都没写。
 8. **条件挂靠**：条件、例外、否定修饰的是哪个动作。「除非……」单独成句时，读者不知道它限制的是前面哪个指令。
 
+## 「看起来像常识」的问题清单
+
+最容易漏掉的缺口，是作者自己觉得不需要解释的地方。改写者读到这些词时，也容易顺着默认理解滑过去。
+
+扫描原文，对**真正出现了**下面这类词的地方，逐项问自己一句：这个词在这里的意思，原文写明了吗？没写明，就在「保留未改：」里问作者。原文里没有出现的概念，不要硬问，不要把这个清单当问卷。只问会让两个读者做出不同动作的，同一类问题在同一段里只问一次。
+
+1. **起点与下标**：序号、下标、页码、行号、「第 N 个」，从 0 开始还是从 1 开始？
+2. **计数口径**：「一次」「每次」「最多 N」「累计」是按什么单位算：每次回复、每个请求、每个会话，还是每分钟？单笔还是累计？去不去重？
+3. **指的是哪一个**：「上一个」「最近」「最新」「当前」「默认」「previous」「latest」指哪一个？按什么字段、什么顺序排？
+4. **单位与换算**：MB、GB 按 1000 还是 1024？秒还是毫秒？时区？字节还是字符（一个汉字占几个字节）？
+5. **「所有」的外延**：「所有」「全部」「任意」包不包括已删除、已归档、隐藏、无权限的？「空」算不算？
+6. **失败的后果**：被拒绝、超时、出错的操作，有没有部分生效？会不会计费？能不能原样重试？
+7. **大小写、全半角、空白、编码**：区不区分？
+8. **谁、对谁**：「用户」是终端用户还是调用方？「你」「我们」指谁？
+
 ## 流程
 
 1. 选模式。只在用户要求看规则表时说明选了哪种模式。
 2. 通读原文，弄清它必须表达的意思，然后再动手。
-3. 逐句检查。标出违反核心规则和扫描清单的地方。可以先运行 `python3 scripts/zh-lint.py FILE` 做机械检查。风格模式加 `--mode flavored`。
+3. 逐句检查。标出违反核心规则和扫描清单的地方，再过一遍「看起来像常识」的问题清单。可以先运行 `python3 scripts/zh-lint.py FILE` 做机械检查。风格模式加 `--mode flavored`。
 4. 逐句改写，修正违规，并保留原意。
    - **先核对情态，再定稿。**「可能」「大约」「一般」是作者的把握程度，也是内容。为了缩短句子删掉它们，就是换了一个说法。这是消歧改写最常见的错误。
    - **不补原文没有的事实。**原文没写执行者，而且无法从上下文确定时，不要编一个。这时保留原文写法，在「保留未改：」一行里说明缺少什么信息。
