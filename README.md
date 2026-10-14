@@ -93,7 +93,9 @@ python3 scripts/zh-lint.py --selftest
 
 ## 配套：rewrite-fidelity
 
-linter 只看改写稿本身，无法确认改写有没有改变意思。[rewrite-fidelity](https://github.com/meiluosi/rewrite-fidelity-skill) 对比原文和改写稿，检查数字、代码、条件、否定、上下限、情态强度有没有丢失或被改动。装了它之后，本 skill 会在输出前自动运行这项检查。
+linter 只看改写稿本身，无法确认改写有没有改变意思。[rewrite-fidelity](https://github.com/meiluosi/rewrite-fidelity-skill) 对比原文和改写稿，检查数字、代码、条件、否定、上下限、情态强度有没有丢失或被改动，v0.1.2 起还检查阈值方向（`不超过` 改成 `超过`）、比较方向（「A 比 B 好」改成「B 比 A 好」）和断言强度（「可能」改成「一定」）。词和符号按同一组处理，本 skill 推荐的 `90% 以上` → `≥ 90%` 不会被当成变化。装了它之后，本 skill 会在输出前自动运行这项检查。
+
+这一条是实测出来的：新检查的第一版在本项目积累的 141 对真实改写上，新增的 error 全部是误报，其中最典型的就是 `以上` → `≥`。已在 rewrite-fidelity v0.1.2 修复，详见它的 release 说明。
 
 ```bash
 FIDELITY=../rewrite-fidelity-skill/scripts/fidelity.py sh examples/run-examples.sh
